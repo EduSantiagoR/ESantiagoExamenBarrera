@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ESantiagoExamenBarreraModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="IdAlumno" />
+          </Key>
+          <Property Name="IdAlumno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AlumnoMateria">
+          <Key>
+            <PropertyRef Name="IdAlumno" />
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdAlumno" Type="int" Nullable="false" />
+          <Property Name="IdMateria" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Boleta">
+          <Key>
+            <PropertyRef Name="NumeroBoleta" />
+          </Key>
+          <Property Name="NumeroBoleta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAlumno" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ESantiagoExamenBarrera.dbo.Calificaciones' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Calificaciones">
+          <Key>
+            <PropertyRef Name="NumeroBoleta" />
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="NumeroBoleta" Type="int" Nullable="false" />
+          <Property Name="IdMateria" Type="int" Nullable="false" />
+          <Property Name="Calificacion" Type="decimal" Precision="4" Scale="2" />
+        </EntityType>
+        <EntityType Name="Materia">
+          <Key>
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdMateria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="IdProfesor" />
+          </Key>
+          <Property Name="IdProfesor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProfesorMateria">
+          <Key>
+            <PropertyRef Name="IdProfesor" />
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdProfesor" Type="int" Nullable="false" />
+          <Property Name="IdMateria" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__AlumnoMat__IdAlu__145C0A3F">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="1" />
+          <End Role="AlumnoMateria" Type="Self.AlumnoMateria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="IdAlumno" />
+            </Principal>
+            <Dependent Role="AlumnoMateria">
+              <PropertyRef Name="IdAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AlumnoMat__IdMat__15502E78">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="1" />
+          <End Role="AlumnoMateria" Type="Self.AlumnoMateria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="IdMateria" />
+            </Principal>
+            <Dependent Role="AlumnoMateria">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Boleta__IdAlumno__4AB81AF0">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Boleta" Type="Self.Boleta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="IdAlumno" />
+            </Principal>
+            <Dependent Role="Boleta">
+              <PropertyRef Name="IdAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdMat__5CD6CB2B">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="IdMateria" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__Numer__5BE2A6F2">
+          <End Role="Boleta" Type="Self.Boleta" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Boleta">
+              <PropertyRef Name="NumeroBoleta" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="NumeroBoleta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProfesorM__IdMat__1BFD2C07">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="1" />
+          <End Role="ProfesorMateria" Type="Self.ProfesorMateria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="IdMateria" />
+            </Principal>
+            <Dependent Role="ProfesorMateria">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProfesorM__IdPro__1B0907CE">
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="1" />
+          <End Role="ProfesorMateria" Type="Self.ProfesorMateria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="IdProfesor" />
+            </Principal>
+            <Dependent Role="ProfesorMateria">
+              <PropertyRef Name="IdProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AlumnoMateriaAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlumno" Type="int" Mode="In" />
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AlumnoMateriaDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlumno" Type="int" Mode="In" />
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BoletaGetCalificaciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlumno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BoletaGetMaterias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NumeroBoleta" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BoletaUpdateCalificacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Calificacion" Type="decimal" Mode="In" />
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+          <Parameter Name="NumeroBoleta" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetMateriasAsignadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlumno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetMateriasNoAsignadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlumno" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProfesorMateriaAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProfesor" Type="int" Mode="In" />
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProfesorMateriaDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProfesor" Type="int" Mode="In" />
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProfesorMateriaGetMateriasAsignadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProfesor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProfesorMateriaGetMateriasNoAsignadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProfesor" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ESantiagoExamenBarreraModelStoreContainer">
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlumnoMateria" EntityType="Self.AlumnoMateria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Boleta" EntityType="Self.Boleta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfesorMateria" EntityType="Self.ProfesorMateria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Calificaciones].[NumeroBoleta] AS [NumeroBoleta], 
+    [Calificaciones].[IdMateria] AS [IdMateria], 
+    [Calificaciones].[Calificacion] AS [Calificacion]
+    FROM [dbo].[Calificaciones] AS [Calificaciones]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__AlumnoMat__IdAlu__145C0A3F" Association="Self.FK__AlumnoMat__IdAlu__145C0A3F">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="AlumnoMateria" EntitySet="AlumnoMateria" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AlumnoMat__IdMat__15502E78" Association="Self.FK__AlumnoMat__IdMat__15502E78">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="AlumnoMateria" EntitySet="AlumnoMateria" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Boleta__IdAlumno__4AB81AF0" Association="Self.FK__Boleta__IdAlumno__4AB81AF0">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="Boleta" EntitySet="Boleta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdMat__5CD6CB2B" Association="Self.FK__Calificac__IdMat__5CD6CB2B">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__Numer__5BE2A6F2" Association="Self.FK__Calificac__Numer__5BE2A6F2">
+            <End Role="Boleta" EntitySet="Boleta" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProfesorM__IdMat__1BFD2C07" Association="Self.FK__ProfesorM__IdMat__1BFD2C07">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="ProfesorMateria" EntitySet="ProfesorMateria" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProfesorM__IdPro__1B0907CE" Association="Self.FK__ProfesorM__IdPro__1B0907CE">
+            <End Role="Profesor" EntitySet="Profesor" />
+            <End Role="ProfesorMateria" EntitySet="ProfesorMateria" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ESantiagoExamenBarreraModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="IdAlumno" />
+          </Key>
+          <Property Name="IdAlumno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Materias" Relationship="Self.AlumnoMateria" FromRole="Alumno" ToRole="Materia" />
+          <NavigationProperty Name="Boletas" Relationship="ESantiagoExamenBarreraModel.FK__Boleta__IdAlumno__4AB81AF0" FromRole="Alumno" ToRole="Boleta" />
+        </EntityType>
+        <EntityType Name="Materia">
+          <Key>
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdMateria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Alumnoes" Relationship="Self.AlumnoMateria" FromRole="Materia" ToRole="Alumno" />
+          <NavigationProperty Name="Profesors" Relationship="Self.ProfesorMateria" FromRole="Materia" ToRole="Profesor" />
+          <NavigationProperty Name="Calificaciones" Relationship="ESantiagoExamenBarreraModel.FK__Calificac__IdMat__5CD6CB2B" FromRole="Materia" ToRole="Calificacione" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="IdProfesor" />
+          </Key>
+          <Property Name="IdProfesor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Materias" Relationship="Self.ProfesorMateria" FromRole="Profesor" ToRole="Materia" />
+        </EntityType>
+        <Association Name="AlumnoMateria">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="*" />
+          <End Role="Materia" Type="Self.Materia" Multiplicity="*" />
+        </Association>
+        <Association Name="ProfesorMateria">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="*" />
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ESantiagoExamenBarreraEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alumnoes" EntityType="Self.Alumno" />
+          <EntitySet Name="Materias" EntityType="Self.Materia" />
+          <EntitySet Name="Profesors" EntityType="Self.Profesor" />
+          <AssociationSet Name="AlumnoMateria" Association="Self.AlumnoMateria">
+            <End Role="Alumno" EntitySet="Alumnoes" />
+            <End Role="Materia" EntitySet="Materias" />
+          </AssociationSet>
+          <AssociationSet Name="ProfesorMateria" Association="Self.ProfesorMateria">
+            <End Role="Materia" EntitySet="Materias" />
+            <End Role="Profesor" EntitySet="Profesors" />
+          </AssociationSet>
+          <FunctionImport Name="GetMateriasAsignadas" ReturnType="Collection(ESantiagoExamenBarreraModel.GetMateriasAsignadas_Result)">
+          <Parameter Name="IdAlumno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetMateriasNoAsignadas" ReturnType="Collection(ESantiagoExamenBarreraModel.GetMateriasNoAsignadas_Result)">
+          <Parameter Name="IdAlumno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProfesorMateriaDelete">
+            <Parameter Name="IdProfesor" Mode="In" Type="Int32" />
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProfesorMateriaGetMateriasAsignadas" ReturnType="Collection(ESantiagoExamenBarreraModel.ProfesorMateriaGetMateriasAsignadas_Result)">
+          <Parameter Name="IdProfesor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProfesorMateriaGetMateriasNoAsignadas" ReturnType="Collection(ESantiagoExamenBarreraModel.ProfesorMateriaGetMateriasNoAsignadas_Result)">
+          <Parameter Name="IdProfesor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProfesorMateriaAdd">
+            <Parameter Name="IdProfesor" Mode="In" Type="Int32" />
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Boletas" EntityType="ESantiagoExamenBarreraModel.Boleta" />
+          <EntitySet Name="Calificaciones" EntityType="ESantiagoExamenBarreraModel.Calificacione" />
+          <AssociationSet Name="FK__Boleta__IdAlumno__4AB81AF0" Association="ESantiagoExamenBarreraModel.FK__Boleta__IdAlumno__4AB81AF0">
+            <End Role="Alumno" EntitySet="Alumnoes" />
+            <End Role="Boleta" EntitySet="Boletas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__Numer__5BE2A6F2" Association="ESantiagoExamenBarreraModel.FK__Calificac__Numer__5BE2A6F2">
+            <End Role="Boleta" EntitySet="Boletas" />
+            <End Role="Calificacione" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdMat__5CD6CB2B" Association="ESantiagoExamenBarreraModel.FK__Calificac__IdMat__5CD6CB2B">
+            <End Role="Materia" EntitySet="Materias" />
+            <End Role="Calificacione" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <FunctionImport Name="AlumnoMateriaAdd">
+            <Parameter Name="IdAlumno" Mode="In" Type="Int32" />
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AlumnoMateriaDelete">
+            <Parameter Name="IdAlumno" Mode="In" Type="Int32" />
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BoletaGetCalificaciones" ReturnType="Collection(ESantiagoExamenBarreraModel.BoletaGetCalificaciones_Result)">
+          <Parameter Name="IdAlumno" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BoletaGetMaterias" ReturnType="Collection(ESantiagoExamenBarreraModel.BoletaGetMaterias_Result)">
+          <Parameter Name="NumeroBoleta" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BoletaUpdateCalificacion">
+            <Parameter Name="Calificacion" Mode="In" Type="Decimal" />
+            <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+            <Parameter Name="NumeroBoleta" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetMateriasAsignadas_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetMateriasNoAsignadas_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="ProfesorMateriaGetMateriasAsignadas_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="ProfesorMateriaGetMateriasNoAsignadas_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="Boleta">
+          <Key>
+            <PropertyRef Name="NumeroBoleta" />
+          </Key>
+          <Property Name="NumeroBoleta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAlumno" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Alumno" Relationship="ESantiagoExamenBarreraModel.FK__Boleta__IdAlumno__4AB81AF0" FromRole="Boleta" ToRole="Alumno" />
+          <NavigationProperty Name="Calificaciones" Relationship="ESantiagoExamenBarreraModel.FK__Calificac__Numer__5BE2A6F2" FromRole="Boleta" ToRole="Calificacione" />
+        </EntityType>
+        <EntityType Name="Calificacione">
+          <Key>
+            <PropertyRef Name="NumeroBoleta" />
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="NumeroBoleta" Type="Int32" Nullable="false" />
+          <Property Name="IdMateria" Type="Int32" Nullable="false" />
+          <Property Name="Calificacion" Type="Decimal" Precision="4" Scale="2" />
+          <NavigationProperty Name="Boleta" Relationship="ESantiagoExamenBarreraModel.FK__Calificac__Numer__5BE2A6F2" FromRole="Calificacione" ToRole="Boleta" />
+          <NavigationProperty Name="Materia" Relationship="ESantiagoExamenBarreraModel.FK__Calificac__IdMat__5CD6CB2B" FromRole="Calificacione" ToRole="Materia" />
+        </EntityType>
+        <Association Name="FK__Boleta__IdAlumno__4AB81AF0">
+          <End Type="ESantiagoExamenBarreraModel.Alumno" Role="Alumno" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ESantiagoExamenBarreraModel.Boleta" Role="Boleta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="IdAlumno" />
+            </Principal>
+            <Dependent Role="Boleta">
+              <PropertyRef Name="IdAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__Numer__5BE2A6F2">
+          <End Type="ESantiagoExamenBarreraModel.Boleta" Role="Boleta" Multiplicity="1" />
+          <End Type="ESantiagoExamenBarreraModel.Calificacione" Role="Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Boleta">
+              <PropertyRef Name="NumeroBoleta" />
+            </Principal>
+            <Dependent Role="Calificacione">
+              <PropertyRef Name="NumeroBoleta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdMat__5CD6CB2B">
+          <End Type="ESantiagoExamenBarreraModel.Materia" Role="Materia" Multiplicity="1" />
+          <End Type="ESantiagoExamenBarreraModel.Calificacione" Role="Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="IdMateria" />
+            </Principal>
+            <Dependent Role="Calificacione">
+              <PropertyRef Name="IdMateria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="BoletaGetCalificaciones_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="Calificacion" Nullable="true" Precision="4" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="BoletaGetMaterias_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="Calificacion" Nullable="true" Precision="4" Scale="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ESantiagoExamenBarreraModelStoreContainer" CdmEntityContainer="ESantiagoExamenBarreraEntities">
+          <EntitySetMapping Name="Alumnoes">
+            <EntityTypeMapping TypeName="ESantiagoExamenBarreraModel.Alumno">
+              <MappingFragment StoreEntitySet="Alumno">
+                <ScalarProperty Name="IdAlumno" ColumnName="IdAlumno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materias">
+            <EntityTypeMapping TypeName="ESantiagoExamenBarreraModel.Materia">
+              <MappingFragment StoreEntitySet="Materia">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profesors">
+            <EntityTypeMapping TypeName="ESantiagoExamenBarreraModel.Profesor">
+              <MappingFragment StoreEntitySet="Profesor">
+                <ScalarProperty Name="IdProfesor" ColumnName="IdProfesor" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AlumnoMateria" TypeName="ESantiagoExamenBarreraModel.AlumnoMateria" StoreEntitySet="AlumnoMateria">
+            <EndProperty Name="Alumno">
+              <ScalarProperty Name="IdAlumno" ColumnName="IdAlumno" />
+            </EndProperty>
+            <EndProperty Name="Materia">
+              <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ProfesorMateria" TypeName="ESantiagoExamenBarreraModel.ProfesorMateria" StoreEntitySet="ProfesorMateria">
+            <EndProperty Name="Materia">
+              <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+            </EndProperty>
+            <EndProperty Name="Profesor">
+              <ScalarProperty Name="IdProfesor" ColumnName="IdProfesor" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="GetMateriasAsignadas" FunctionName="ESantiagoExamenBarreraModel.Store.GetMateriasAsignadas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.GetMateriasAsignadas_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetMateriasNoAsignadas" FunctionName="ESantiagoExamenBarreraModel.Store.GetMateriasNoAsignadas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.GetMateriasNoAsignadas_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProfesorMateriaDelete" FunctionName="ESantiagoExamenBarreraModel.Store.ProfesorMateriaDelete" />
+          <FunctionImportMapping FunctionImportName="ProfesorMateriaGetMateriasAsignadas" FunctionName="ESantiagoExamenBarreraModel.Store.ProfesorMateriaGetMateriasAsignadas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.ProfesorMateriaGetMateriasAsignadas_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProfesorMateriaGetMateriasNoAsignadas" FunctionName="ESantiagoExamenBarreraModel.Store.ProfesorMateriaGetMateriasNoAsignadas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.ProfesorMateriaGetMateriasNoAsignadas_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProfesorMateriaAdd" FunctionName="ESantiagoExamenBarreraModel.Store.ProfesorMateriaAdd" />
+          <EntitySetMapping Name="Boletas">
+            <EntityTypeMapping TypeName="ESantiagoExamenBarreraModel.Boleta">
+              <MappingFragment StoreEntitySet="Boleta">
+                <ScalarProperty Name="IdAlumno" ColumnName="IdAlumno" />
+                <ScalarProperty Name="NumeroBoleta" ColumnName="NumeroBoleta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Calificaciones">
+            <EntityTypeMapping TypeName="ESantiagoExamenBarreraModel.Calificacione">
+              <MappingFragment StoreEntitySet="Calificaciones">
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="NumeroBoleta" ColumnName="NumeroBoleta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AlumnoMateriaAdd" FunctionName="ESantiagoExamenBarreraModel.Store.AlumnoMateriaAdd" />
+          <FunctionImportMapping FunctionImportName="AlumnoMateriaDelete" FunctionName="ESantiagoExamenBarreraModel.Store.AlumnoMateriaDelete" />
+          <FunctionImportMapping FunctionImportName="BoletaGetCalificaciones" FunctionName="ESantiagoExamenBarreraModel.Store.BoletaGetCalificaciones">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.BoletaGetCalificaciones_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BoletaGetMaterias" FunctionName="ESantiagoExamenBarreraModel.Store.BoletaGetMaterias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ESantiagoExamenBarreraModel.BoletaGetMaterias_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BoletaUpdateCalificacion" FunctionName="ESantiagoExamenBarreraModel.Store.BoletaUpdateCalificacion" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,39 @@
+﻿@model ML.Boleta
+@{
+    ViewBag.Title = "Boleta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Boleta</h2>
+<hr />
+<div class="container">
+    @if (Model.Calificaciones != null)
+    {
+        if (Model.Calificaciones.Count > 0)
+        {
+            <table class="table table-dark table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Materia</th>
+                        <th>Calificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Boleta calificacion in Model.Calificaciones)
+                    {
+                        <tr>
+                            <td>@calificacion.Nombre</td>
+                            <td>@calificacion.Calificacion</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div role="alert" class="alert alert-warning">
+                No tienes materias registradas
+            </div>
+        }
+    }
+</div>

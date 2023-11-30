@@ -1,0 +1,34 @@
+﻿@model ML.Boleta
+@{
+    ViewBag.Title = "Boleta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Boleta</h2>
+<hr />
+<div class="container">
+    @using (Html.BeginForm("Boleta", "ProfesorMateria", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <table class="table table-dark table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Materia</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ML.Boleta materia in Model.Calificaciones)
+                {
+                    <tr>
+                        <td>@materia.Nombre</td>
+                        <td class="d-flex justify-content-center"><input style="width:100px" name="calificaciones[]" class="form-control" value="@materia.Calificacion"/></td>
+                        <td hidden><input name="materias[]" value="@materia.IdMateria" hidden/></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <button class="btn btn-success" type="submit">Guardar</button>
+        </div>
+    }
+</div>

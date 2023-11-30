@@ -1,0 +1,39 @@
+﻿@model ML.Profesor
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Profesores</h2>
+<hr />
+<div>
+    <a class="btn btn-success" href="@Url.Action("Form","Profesor")">Agregar</a>
+</div>
+<hr />
+<div class="container">
+    <table class="table table-dark table-hover text-center">
+        <thead>
+            <tr>
+                <th>Editar</th>
+                <th>Materias</th>
+                <th>Nombre</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(ML.Profesor profesor in Model.Profesores)
+            {
+                <tr>
+                    <td><a class="btn btn-warning" href="@Url.Action("Form","Profesor",new {idProfesor = profesor.IdProfesor})"></a></td>
+                    <td><a class="btn btn-info" href="@Url.Action("GetMateriasAsignadas", "ProfesorMateria", new {idProfesor = profesor.IdProfesor, nombreProfesor = profesor.Nombre +" "+profesor.ApellidoPaterno + " " +profesor.ApellidoMaterno })"></a></td>
+                    <td>@profesor.Nombre</td>
+                    <td>@profesor.ApellidoPaterno</td>
+                    <td>@profesor.ApellidoMaterno</td>
+                    <td><a class="btn btn-danger" href="@Url.Action("Delete","Profesor", new {idProfesor = profesor.IdProfesor})"></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
